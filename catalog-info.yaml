@@ -1,15 +1,15 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: scania-app
+  name: backstage-app
+  title: scania-react-app
   description: Hello World React application using Scania Docker image
   annotations:
-    backstage.io/techdocs-ref: react-app
-    backstage.io/managed-by-location: auto
+    github.com/project-slug: RamtilakChandrasekaran/backstage-app
 spec:
   type: service
   lifecycle: production
-  owner: ramtilakchandrasekaran
+  owner: user:Ramtilak-C
   dependencies:
   containers:
     - name: scania-app-container

@@ -5,7 +5,7 @@ metadata:
   title: scania-react-app
   description: Hello World React application using Scania Docker image
   annotations:
-    github.com/project-slug: RamtilakChandrasekaran/backstage-app
+    github.com/project-slug: Ramtilak-C/backstage-app
 spec:
   type: service
   lifecycle: production

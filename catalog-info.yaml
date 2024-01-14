@@ -9,7 +9,7 @@ metadata:
 spec:
   type: service
   lifecycle: production
-  owner: Ramtilak-C
+  owner: user:Ramtilak-C
   dependencies:
   containers:
     - name: scania-app-container

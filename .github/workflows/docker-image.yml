@@ -38,6 +38,7 @@ jobs:
           registry: ${{ steps.ecr-output.outputs.registry }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-default-region: "eu-north-1" 
 
       - name: Build and Push Docker Image
         run: |

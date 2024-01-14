@@ -17,4 +17,4 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag scania-app:latest
     - name: Run Docker container locally
-      run: docker run -p 4000:3000 scania-app:latest
+      run: docker run  -t -d -p 4000:3000 scania-app:latest

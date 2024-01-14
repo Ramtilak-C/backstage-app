@@ -1,20 +1,46 @@
-name: Docker Image CI
+name: Docker Image CI/CD
 
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
+
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag scania-app:latest
-    - name: Run Docker container locally
-      run: docker run -t -d -p 4000:3000 scania-app:latest
+
+    - name: Create ECR Repository
+      id: create-ecr
+      run: |
+        AWS_REGISTRY_URL=$(aws ecr create-repository --repository-name my-ecr-repo --output json --query 'repository.repositoryUri')
+        echo "::set-output name=registry::$AWS_REGISTRY_URL"
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+        registry: ${{ steps.create-ecr.outputs.registry }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    - name: Tag Docker image
+      run: docker tag scania-app:latest ${{ steps.login-ecr.outputs.registry }}/my-ecr-repo:latest
+
+    - name: Push Docker image to Amazon ECR
+      run: docker push ${{ steps.login-ecr.outputs.registry }}/my-ecr-repo:latest
+
+    - name: Deploy to ECS
+      run: |
+        aws ecs update-service --cluster my-cluster --service my-service --force-new-deployment
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: scania-app
+  description: Hello World React application using Scania Docker image
+  annotations:
+    backstage.io/techdocs-ref: react-app
+    backstage.io/managed-by-location: auto
+spec:
+  type: service
+  lifecycle: production
+  owner: ramtilakchandrasekaran
+  dependencies:
+  containers:
+    - name: scania-app-container
+      image: scania-app:latest
+      ports:
+        - port: 3000

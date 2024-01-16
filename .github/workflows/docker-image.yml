@@ -27,7 +27,7 @@ jobs:
       - name: Eslint
         run: |
           yarn lint
-
+ # Add sonarQube scan for code quality check 
   build:
     needs: [test]
     runs-on: ubuntu-latest

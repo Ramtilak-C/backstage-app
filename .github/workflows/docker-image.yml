@@ -1,66 +1,26 @@
-name: Docker Image CI/CD
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: 0.14.9
+    - name: Set up Docker
+      uses: docker/setup-docker@v2
 
-      - name: Initialize Terraform
-        run: terraform init
-
-      - name: Apply Terraform Changes
-        run: terraform apply -auto-approve
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: "eu-north-1"
-
-      - name: Get ECR Repository URL
-        id: ecr-output
-        run: echo "::set-output name=registry::${{ steps.create-ecr.outputs.repository_url }}"
-        
-      - name: Set AWS_REGION for ECR Login
-        run: echo "AWS_REGION=eu-north-1" >> $GITHUB_ENV
-        
-      - name: Debug AWS CLI Environment
-        run: |
-          echo "AWS CLI Version: $(aws --version)"
-          echo "AWS CLI Configuration:"
-          aws configure list
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "eu-north-1"
-      
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "eu-north-1"
-
-      - name: Build and Push Docker Image
-        run: |
-          docker build . --file Dockerfile --tag scania-app:latest
-          docker tag scania-app:latest ${{ steps.login-ecr.outputs.registry }}/my-ecr-repo:latest
-          docker push ${{ steps.login-ecr.outputs.registry }}/my-ecr-repo:latest
-
-      - name: Deploy to ECS
-        run: |
-          aws ecs update-service --cluster my-cluster --service my-service --force-new-deployment
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    - name: Build and Push Docker Image
+      env:
+        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      run: |
+        docker build -t scania-app:latest .
+        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
+        docker push scania-app:latest

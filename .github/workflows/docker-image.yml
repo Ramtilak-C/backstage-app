@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backstage-app
+        working-directory: ../backstage-app
     steps:
       - name: Unit test
         run: |

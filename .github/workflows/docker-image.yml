@@ -25,5 +25,5 @@ jobs:
 
     - name: Deploy Locally
       run: |
-        docker-compose up -d
+        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN docker.io && docker-compose up -d
         echo "Application is accessible at http://localhost:4000"

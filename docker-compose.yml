@@ -1,6 +1,6 @@
 version: '3'
 services:
   my-app:
-    image: scania:latest
+    image: ramtilakc/scania:latest
     ports:
       - "4000:3000"

@@ -1,7 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import MyComponent from './MyComponent';
-import '@testing-library/jest-dom/jest-globals';
 import '@testing-library/jest-dom';
 
 

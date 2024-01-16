@@ -15,12 +15,14 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    
+    defaults:
+      run:
+        working-directory: ./backstage-app
     steps:
       - name: Unit test
         run: |
-          yarn install
-          yarn test
+          npm install
+          npm test
     
       - name: Eslint
         run: |

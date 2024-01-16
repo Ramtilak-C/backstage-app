@@ -19,5 +19,4 @@ jobs:
         DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
       run: |
         docker build -t scania-app:latest .
-        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN
-        docker push scania-app:latest
+        docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN && docker push docker.io/library/scania-app:latest

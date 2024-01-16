@@ -26,4 +26,4 @@ jobs:
     - name: Deploy Locally
       run: |
         docker-compose up -d
-        echo "Application is accessible at http://localhost:8080"
+        echo "Application is accessible at http://localhost:4000"

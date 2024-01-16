@@ -43,10 +43,6 @@ Backstage will be available at http://localhost:3000. Explore the developer port
 
 The Scania App will be accessible at http://localhost:4000. Test the application locally and ensure that it functions as expected.
 
-## GitHub Repository
-
-For detailed code and configuration, refer to the GitHub repository: [Scania App GitHub Repo](https://github.com/Ramtilak-C/backstage-app/)
-
 # Local Testing Workflow
 
 1.  Start Backstage: Follow the Backstage setup steps to run Backstage locally.

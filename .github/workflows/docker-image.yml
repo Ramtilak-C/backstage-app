@@ -22,3 +22,8 @@ jobs:
         docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_TOKEN docker.io
         docker tag scania-app:latest ramtilakc/scania-app:latest
         docker push ramtilakc/scania-app:latest
+
+    - name: Deploy Locally
+      run: |
+        docker-compose up -d
+        echo "Application is accessible at http://localhost:8080"
